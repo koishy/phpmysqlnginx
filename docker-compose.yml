@@ -1,0 +1,31 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8050:80"
+    volumes:
+      - ./code:/var/www/html
+      - ./site.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php
+      - mysql
+  php:
+    build: ./php
+    volumes:
+      - ./code:/var/www/html
+  mysql:
+    image: mariadb
+    ports:
+      - "33061:3306"
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
